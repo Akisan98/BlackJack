@@ -74,7 +74,7 @@ function numberToSymbol(value: number) {
 }
 
 // Oppgave 3
-function calculateValue(total: number, value: number): number {
+export function calculateValue(total: number, value: number): number {
   if (value == 1) {
     return (total + 11) <= MAX_POINTS ? 11 : 1;
   }
@@ -89,7 +89,7 @@ function drawRandom(deck: Card[]) {
   return deck.splice(randomIndex, 1)[0];
 }
 
-function drawCard(hand: Array<Card | undefined>, deck: Card[], isDealer: boolean) {
+export function drawCard(hand: Array<Card | undefined>, deck: Card[], isDealer: boolean) {
   // Draw Card
   const card = drawRandom(deck);
   hand.push(card);
