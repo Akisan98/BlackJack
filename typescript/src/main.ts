@@ -27,7 +27,7 @@ async function main(whenFinished: () => void) {
     // Oppgave 1 - 21 poeng grense.
     if (total > MAX_POINTS) {
       console.log(`Exceeded ${MAX_POINTS} points, player lost.`);
-      break;
+      process.exit(0);
     }
     
     await readConsole.questionAsync("Stand, Hit (s/h) \n").then((read) => {
