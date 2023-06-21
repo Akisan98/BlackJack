@@ -46,6 +46,8 @@ async function main(whenFinished: () => void) {
     dealerTotal = dealerDraws(dealerHand, deck.cards);
   }
 
+  whoWon(total, dealerTotal);
+
   whenFinished();
 }
 
@@ -94,8 +96,25 @@ function dealerDraws(hand: Array<Card | undefined>, deck: Card[]) {
   const card = drawRandom(deck);
   hand.push(card);
 
-  var total = hand.reduce((total, card) => total + (card?.rank || 0), 0);
+  var total = hand.reduce((total, card) => total + (card?.rank == 1 ? 11 : card?.rank || 0), 0);
   console.log(`Dealer hit with ${card?.Suit} ${numberToSymbol(card?.rank)}. Total is ${total}`);
 
   return total;
+}
+
+function whoWon(playerTotal: number, dealerTotal: number) {
+  if (dealerTotal > MAX_POINTS) {
+    console.log(`Dealer exceeded ${MAX_POINTS} points, player won.`);
+    return;
+  }
+
+  const difference = playerTotal - dealerTotal;
+
+  if (difference > 0) {
+    console.log(`Player won.`);
+    return;
+  }
+
+  console.log(`Dealer won.`);
+  return;
 }
