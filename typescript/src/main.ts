@@ -16,7 +16,7 @@ async function main(whenFinished: () => void) {
 
   let playing = true;
   while (playing) {
-    var card = deck.cards.pop();
+    var card = drawRandom(deck.cards);
     hand.push(card);
 
     var total = hand.reduce((total, card) => total + calculateValue(total, (card?.rank || 0)), 0);
@@ -68,4 +68,11 @@ function calculateValue(total: number, value: number): number {
   }
 
   return value;
+}
+
+// Oppgave 4
+function drawRandom(deck: Card[]) {
+  const randomIndex = Math.floor(Math.random() * deck.length);
+  
+  return deck.splice(randomIndex, 1)[0];
 }
