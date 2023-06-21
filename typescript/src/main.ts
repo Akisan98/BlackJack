@@ -16,15 +16,13 @@ async function main(whenFinished: () => void) {
   const playerHand = new Array<Card | undefined>();
   const dealerHand = new Array<Card | undefined>();
 
-  dealerDraws(dealerHand, deck.cards);
+  // Dealer Draws
+  drawCard(dealerHand, deck.cards, true);
 
   let playing = true;
   while (playing) {
-    var card = drawRandom(deck.cards);
-    playerHand.push(card);
-
-    var total = playerHand.reduce((total, card) => total + calculateValue(total, (card?.rank || 0)), 0);
-    console.log(`Hit with ${card?.Suit} ${ numberToSymbol(card?.rank) }. Total is ${total}`);
+    // Player Draws
+    var total = drawCard(playerHand, deck.cards, false);
 
     // Oppgave 1 - 21 poeng grense.
     if (total > MAX_POINTS) {
@@ -43,7 +41,7 @@ async function main(whenFinished: () => void) {
   let dealerTotal = dealerHand.reduce((total, card) => total + (card?.rank || 0), 0);
   
   while (dealerTotal < DEALER_DRAW_LIMIT) {
-    dealerTotal = dealerDraws(dealerHand, deck.cards);
+    dealerTotal = drawCard(dealerHand, deck.cards, true);
   }
 
   whoWon(total, dealerTotal);
@@ -91,14 +89,18 @@ function drawRandom(deck: Card[]) {
   return deck.splice(randomIndex, 1)[0];
 }
 
-function dealerDraws(hand: Array<Card | undefined>, deck: Card[]) {
-  // Dealer Draws
+function drawCard(hand: Array<Card | undefined>, deck: Card[], isDealer: boolean) {
+  // Draw Card
   const card = drawRandom(deck);
   hand.push(card);
 
-  var total = hand.reduce((total, card) => total + (card?.rank == 1 ? 11 : card?.rank || 0), 0);
-  console.log(`Dealer hit with ${card?.Suit} ${numberToSymbol(card?.rank)}. Total is ${total}`);
+  // Calculate Score
+  var total = hand.reduce((total, card) => isDealer ? 
+      total + (card?.rank == 1 ? 11 : card?.rank || 0) : 
+      total + calculateValue(total, (card?.rank || 0)), 
+  0);
 
+  console.log(`${isDealer ? "Dealer" : "Player"} hit with ${card?.Suit} ${numberToSymbol(card?.rank)}. Total is ${total}`);
   return total;
 }
 
@@ -116,5 +118,4 @@ function whoWon(playerTotal: number, dealerTotal: number) {
   }
 
   console.log(`Dealer won.`);
-  return;
 }
