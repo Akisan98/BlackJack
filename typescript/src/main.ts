@@ -19,7 +19,7 @@ async function main(whenFinished: () => void) {
     var card = deck.cards.pop();
     hand.push(card);
 
-    var total = hand.reduce((total, card) => total + (card?.rank || 0), 0);
+    var total = hand.reduce((total, card) => total + calculateValue(total, (card?.rank || 0)), 0);
     console.log(`Hit with ${card?.Suit} ${ numberToSymbol(card?.rank) }. Total is ${total}`);
 
     // Oppgave 1 - 21 poeng grense.
@@ -59,4 +59,13 @@ function numberToSymbol(value: number) {
   }
 
   return symbols[value];
+}
+
+// Oppgave 3
+function calculateValue(total: number, value: number): number {
+  if (value == 1) {
+    return (total + 11) <= MAX_POINTS ? 11 : 1;
+  }
+
+  return value;
 }
